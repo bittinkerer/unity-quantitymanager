@@ -1,0 +1,21 @@
+{
+  "name": "com.esteny.quanity_manager",
+  "version": "1.0.0",
+  "displayName": "Quantity Manager",
+  "description": "Unity Scripts for dealing with quantities such as HP..",
+  "unity": "2019.1",
+  "unityRelease": "0b5",  
+  "dependencies": {
+    "com.estenis.gamedata": "1.0.0"
+	
+ },
+ "keywords": [
+    "quantity",
+	"quantity manager"
+  ],
+  "author": {
+    "name": "Ernesto Pavon",
+    "email": "bittinkerer@gmail.com",
+    "url": "https://github.com/bittinkerer"
+  }
+}
