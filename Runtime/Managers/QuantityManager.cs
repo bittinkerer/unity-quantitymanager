@@ -22,7 +22,9 @@ namespace Assets.Scripts.Play.Handlers
 
         [SerializeField][DisableInt] private int _current;
 
-        private Coroutine _checkMinQuantityRoutine;
+        public int PreviousMax { get; private set; }
+        public int PreviousMin { get; private set; }
+        public int PreviousCurrent { get; private set; }
 
         public int Max
         {
@@ -32,7 +34,7 @@ namespace Assets.Scripts.Play.Handlers
 
         public int Initial => _initial;
 
-        public int Min => _min - 1;
+        public int Min => _min;
 
         /// <summary>
         /// 0-based index of current
@@ -40,7 +42,7 @@ namespace Assets.Scripts.Play.Handlers
         public int Current
         {
             get => _current;
-            protected set => _current = Mathf.Clamp(value, Min, Max-1);
+            protected set => _current = Mathf.Clamp(value, Min, Max);
         }
 
         private void Awake()
@@ -57,40 +59,29 @@ namespace Assets.Scripts.Play.Handlers
             
         }
 
-        private void OnDisable()
-        {
-            if(_checkMinQuantityRoutine != null)
-            {
-                _checkMinQuantityRoutine = null;
-            }
-        }
-
         public void ChangeMax(int amount)
         {
-            if (amount == 0 || (Max >= _terminalMax && amount > 0) || (Max == 0 && amount < 0))
-            {
-                return;
-            }
-
-            if (Max + amount > _terminalMax)
-            { 
-                amount = _terminalMax - _max;
-            }
+            PreviousMax = Max;
             Max += amount;
-            _onMaxChangeEvent.Raise(EventId, this, amount);
-            ChangeCurrent(_max - Current - 1); // Fill to the new max and account for 0-based index of Current (thus the -1)
+            if (PreviousMax != Max && _onMaxChangeEvent) 
+            { 
+                _onMaxChangeEvent.Raise(EventId, this, amount);
+            }
+            else
+            {
+                Debug.LogWarning($"{this.name}.{nameof(QuantityManager)}: Call to change Max produced no change. Max: {Max}, Amount: {amount}");
+            }
         }
 
         public void ChangeCurrent(int amount)
         {
-            amount = Mathf.Clamp(amount, Min - Current, Max - Current - 1);
-            // Current == Min -> Defeated, so no actions available after that.
-            if (amount == 0 || (Current == Max && amount > 0) || (Current == Min && amount < 0))
+            PreviousCurrent = Current;
+            Current += amount;
+            if(Current == PreviousCurrent)
             {
+                Debug.LogWarning($"{this.name}.{nameof(QuantityManager)}: Call to change Current produced no change. Current: {Current}, Amount: {amount}");
                 return;
             }
-
-            Current += amount;
 
             // NOTE: For events that cause transitions, only the first event will be handled and others discarded
             if (Current <= Min && _onCurrentMinEvent)
@@ -98,14 +89,13 @@ namespace Assets.Scripts.Play.Handlers
                 _onCurrentMinEvent.Raise(EventId, this, null);
             }
 
-            if (LaunchMinQuantityEvent())
+            if (Current >= Max && _onCurrentMaxEvent)
             {
                 _onCurrentMaxEvent.Raise(EventId, this, null);
             }
 
             if (_onCurrentChangeEvent)
             {
-                //Debug.Log($"Triggering QuantityChangeEvent with Current: {Current} and Change: {addend}");
                 _onCurrentChangeEvent.Raise(EventId, this, amount);
             }
         }
@@ -115,8 +105,6 @@ namespace Assets.Scripts.Play.Handlers
             Current = Initial;
         }
 
-        public bool LaunchMinQuantityEvent() =>
-            Current <= Min && _onCurrentMinEvent;
     }
 }
 
