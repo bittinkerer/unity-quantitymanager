@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.Editors;
+﻿#if UNITY_EDITOR
+using Assets.Scripts.Editors;
+#endif
 using Packages.Estenis.GameEvent_;
 using UnityEngine;
 
@@ -20,7 +22,11 @@ namespace Assets.Scripts.Play.Handlers
         [SerializeField] private GameEventObject   _onMaxChangeEvent;
         [SerializeField] private GameEventObject   _onInitEvent;
 
-        [SerializeField][DisableInt] private int _current;
+        [SerializeField]
+#if UNITY_EDITOR
+        [DisableInt]
+#endif
+        private int _current;
 
         public int PreviousMax { get; private set; }
         public int PreviousMin { get; private set; }
