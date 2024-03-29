@@ -4,14 +4,10 @@
   "displayName": "Quantity Manager",
   "description": "Unity Scripts for dealing with quantities such as HP..",
   "unity": "2019.1",
-  "unityRelease": "0b5",  
-  "dependencies": {
-    "com.estenis.gamedata": "1.0.0"
-	
- },
- "keywords": [
+  "unityRelease": "0b5",
+  "keywords": [
     "quantity",
-	"quantity manager"
+    "quantity manager"
   ],
   "author": {
     "name": "Ernesto Pavon",
