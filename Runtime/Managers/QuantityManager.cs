@@ -60,7 +60,7 @@ namespace Assets.Scripts.Play.Handlers
         {
             if (_onInitEvent != null)
             {
-                _onInitEvent.Raise(EventId, this, this);
+                _onInitEvent.Raise(EventId, this.gameObject, this);
             }
             
         }
@@ -71,7 +71,7 @@ namespace Assets.Scripts.Play.Handlers
             Max += amount;
             if (PreviousMax != Max && _onMaxChangeEvent) 
             { 
-                _onMaxChangeEvent.Raise(EventId, this, amount);
+                _onMaxChangeEvent.Raise(EventId, this.gameObject, amount);
             }
             else
             {
@@ -92,17 +92,17 @@ namespace Assets.Scripts.Play.Handlers
             // NOTE: For events that cause transitions, only the first event will be handled and others discarded
             if (Current <= Min && _onCurrentMinEvent)
             {
-                _onCurrentMinEvent.Raise(EventId, this, null);
+                _onCurrentMinEvent.Raise(EventId, this.gameObject, null);
             }
 
             if (Current >= Max && _onCurrentMaxEvent)
             {
-                _onCurrentMaxEvent.Raise(EventId, this, null);
+                _onCurrentMaxEvent.Raise(EventId, this.gameObject, null);
             }
 
             if (_onCurrentChangeEvent)
             {
-                _onCurrentChangeEvent.Raise(EventId, this, amount);
+                _onCurrentChangeEvent.Raise(EventId, this.gameObject, amount);
             }
         }
 
