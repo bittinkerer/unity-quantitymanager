@@ -1,6 +1,6 @@
 {
   "name": "com.esteny.quanity_manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "Quantity Manager",
   "description": "Unity Scripts for dealing with quantities such as HP..",
   "unity": "2019.1",

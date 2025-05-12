@@ -6,18 +6,19 @@ using Packages.Estenis.UnityExts_;
 
 namespace Packages.com.esteny.quantitymanager.Runtime.Managers
 {
-    public class QuantityRecurringUpdaterAction : BaseGameObjectAction
+  public class QuantityRecurringUpdaterAction : BaseGameObjectAction
+  {
+    [SerializeField] private int _change;
+    [SerializeField] private float _changeEverySeconds;
+    [SerializeField] private QuantityManager _quantityManager;
+
+    private Coroutine _updaterCoroutine;
+
+    protected override object Action(object data)
     {
-        [SerializeField] private int _change;
-        [SerializeField] private float _changeEverySeconds;
-        [SerializeField] private QuantityManager _quantityManager;
-
-        private Coroutine _updaterCoroutine;
-
-        protected override void Action(object data)
-        {
-            _updaterCoroutine = 
-                this.RunCoroutineEvery(() => _quantityManager.ChangeCurrent(_change), _changeEverySeconds);
-        }
+      _updaterCoroutine =
+          this.RunCoroutineEvery(() => _quantityManager.ChangeCurrent(_change), _changeEverySeconds);
+      return null;
     }
+  }
 }
